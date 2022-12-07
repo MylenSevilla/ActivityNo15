@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  -  name: Installing Updates for Ubuntu
+     tags: always
+     apt:
+       upgrade: dist
+       update_cache: yes
+     changed_when: false
+     when: ansible_distribution == "Ubuntu"
+
+- hosts: Controller
+  become: true
+  roles:
+    - Neutron
+    - Horizon
+
+- hosts: Compute
+  become: true
+  roles:
+    - Cinder
